@@ -1,0 +1,10 @@
+*.code-workspace
+*.log
+*.exe
+*.zip
+idea/*
+.vscode/*
+.project
+.idea/*
+log/*
+main
