@@ -11,13 +11,9 @@ Starting to create a project with connection to database to use echo and jwt
 │   └── GolangApi        the API server application
 ├── internal             private application and library code
 │   ├── connection       connection to dabase
-│   ├── models           entity definitions and domain logic
-│   ├── handelr          controller 
-│   └── dao              Data Access Object
-│   ├── accesslog        access log middleware
-│   ├── graceful         graceful shutdown of HTTP server
-│   ├── log              structured and context-aware logger
-│   └── pagination       paginated list
+│   ├── dao              Data Access Object
+│   ├── handler          controller 
+│   └── models           entity definitions and domain logic
 └── database
 ```
 
