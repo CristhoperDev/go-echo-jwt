@@ -8,3 +8,7 @@ idea/*
 .idea/*
 log/*
 main
+cmd/GolangApi/GolangApi
+cmd/GolangApi/GolangApi.exe
+cmd/GolangApi/GolangApi.log
+cmd/main.log
