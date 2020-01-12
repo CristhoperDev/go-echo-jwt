@@ -39,6 +39,36 @@ func RegisterUser(c echo.Context) error {
 	return c.JSON(status, jsonObj)
 }
 
+func generateToken(id int) (map[string]string, error) {
+	// Create token
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = id
+	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return nil, err
+	}
+
+	// Create refresh roken
+	refreshToken := jwt.New(jwt.SigningMethodHS256)
+	rtClaims := refreshToken.Claims.(jwt.MapClaims)
+	rtClaims["sub"] = 1
+	rtClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+	rt, err := refreshToken.SignedString([]byte("secret"))
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]string{
+		"access_token":  t,
+		"refresh_token": rt,
+	}, nil
+}
+
 func UserLogin(c echo.Context) error {
 	var jsonObj model.JsonResultLogin
 	var status int
@@ -54,18 +84,8 @@ func UserLogin(c echo.Context) error {
 
 	data, err := dao.UserLoginByUsernamePassword(userBody.Username, userBody.Password)
 
-	// Create token
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	// Set claims
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = data[0].IdUser
-	claims["exp"] = time.Now().Add(time.Hour * 2).Unix()
-
-	t, err := token.SignedString([]byte("secret"))
-	if err != nil {
-		return err
-	}
+	//get token
+	getToken,_ := generateToken(data[0].IdUser)
 
 	if len(data) == 0 {
 		jsonObj.Status = http.StatusNotFound
@@ -73,7 +93,8 @@ func UserLogin(c echo.Context) error {
 		status = http.StatusNotFound
 	} else {
 		jsonObj.Status = http.StatusOK
-		jsonObj.Token = t
+		jsonObj.Token = getToken["access_token"]
+		jsonObj.RefreshToken = getToken["refresh_token"]
 		jsonObj.Data = data
 		status = http.StatusOK
 	}
