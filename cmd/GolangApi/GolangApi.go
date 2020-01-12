@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/subosito/gotenv"
 	"go-echo-jwt/internal/connection"
 	"go-echo-jwt/internal/handler"
@@ -55,5 +56,10 @@ func main() {
 	e.GET("/", startApplication)
 	e.POST("/register", handler.RegisterUser)
 	e.POST("/login", handler.UserLogin)
+
+	r := e.Group("/")
+	r.Use(middleware.JWT([]byte("secret")))
+	r.GET("users", handler.GetUsers)
+
 	e.Logger.Fatal(e.Start(":3000"))
 }
