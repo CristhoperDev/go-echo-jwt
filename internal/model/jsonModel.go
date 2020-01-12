@@ -11,7 +11,8 @@ type JsonResultError struct {
 }
 
 type JsonResultLogin struct {
-	Status 	int 			`json:"status"`
-	Token 	string 			`json:"token"`
-	Data 	interface{} 	`json:"data"`
+	Status 			int 			`json:"status"`
+	Token 			string 			`json:"token"`
+	RefreshToken 	string 			`json:"refresh_token"`
+	Data 			interface{} 	`json:"data"`
 }
