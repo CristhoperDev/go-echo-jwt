@@ -80,3 +80,22 @@ func UserLogin(c echo.Context) error {
 
 	return c.JSON(status, jsonObj)
 }
+
+func GetUsers(c echo.Context) error {
+	var jsonObj model.JsonResult
+	var status int
+
+	data, err := dao.GetAllUsers()
+
+	if len(data) == 0 {
+		jsonObj.Status = http.StatusNotFound
+		jsonObj.Data = err
+		status = http.StatusNotFound
+	} else {
+		jsonObj.Status = http.StatusOK
+		jsonObj.Data = data
+		status = http.StatusOK
+	}
+
+	return c.JSON(status, jsonObj)
+}
