@@ -16,3 +16,8 @@ type JsonResultLogin struct {
 	RefreshToken 	string 			`json:"refresh_token"`
 	Data 			interface{} 	`json:"data"`
 }
+
+type RefreshTokenBody struct {
+	RefreshToken 	string 		`json:"refresh_token"`
+	IdUser 			int 		`json:"id_user"`
+}
