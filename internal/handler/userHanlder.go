@@ -2,10 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"go-echo-jwt/internal/dao"
 	"go-echo-jwt/internal/model"
 	"net/http"
+	"time"
 )
 
 func RegisterUser(c echo.Context) error {
@@ -38,7 +40,7 @@ func RegisterUser(c echo.Context) error {
 }
 
 func UserLogin(c echo.Context) error {
-	var jsonObj model.JsonResult
+	var jsonObj model.JsonResultLogin
 	var status int
 
 	decoder := json.NewDecoder(c.Request().Body)
@@ -52,6 +54,18 @@ func UserLogin(c echo.Context) error {
 
 	data, err := dao.UserLoginByUsernamePassword(userBody.Username, userBody.Password)
 
+	// Create token
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	// Set claims
+	claims := token.Claims.(jwt.MapClaims)
+	claims["id"] = data[0].IdUser
+	claims["exp"] = time.Now().Add(time.Hour * 2).Unix()
+
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return err
+	}
 
 	if len(data) == 0 {
 		jsonObj.Status = http.StatusNotFound
@@ -59,6 +73,7 @@ func UserLogin(c echo.Context) error {
 		status = http.StatusNotFound
 	} else {
 		jsonObj.Status = http.StatusOK
+		jsonObj.Token = t
 		jsonObj.Data = data
 		status = http.StatusOK
 	}
