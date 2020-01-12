@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"go-echo-jwt/internal/dao"
@@ -119,4 +120,46 @@ func GetUsers(c echo.Context) error {
 	}
 
 	return c.JSON(status, jsonObj)
+}
+
+func RefreshToken(c echo.Context) error {
+	var jsonObj model.JsonResult
+	var status int
+
+	decoder := json.NewDecoder(c.Request().Body)
+	var refreshTokenBody model.RefreshTokenBody
+	if err := decoder.Decode(&refreshTokenBody); err != nil {
+		jsonObj.Status = http.StatusBadRequest
+		jsonObj.Data = "Body not well formed"
+		status = http.StatusBadRequest
+		return c.JSON(status, jsonObj)
+	}
+
+	token, err := jwt.Parse(refreshTokenBody.RefreshToken, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		return []byte("secret"), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		// Get the user record from database or
+		// run through your business logic to verify if the user can log in
+		if int(claims["sub"].(float64)) == 1 {
+
+			newTokenPair, err := generateToken(refreshTokenBody.IdUser)
+			if err != nil {
+				return err
+			}
+
+			return c.JSON(http.StatusOK, newTokenPair)
+		}
+
+		return echo.ErrUnauthorized
+	}
+
+	return err
 }
