@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/subosito/gotenv"
+	"go-echo-jwt/internal/handler"
 	"io"
 	"log"
 	"math/rand"
@@ -50,5 +51,6 @@ func main() {
 
 	e := echo.New()
 	e.GET("/", startApplication)
+	e.POST("/register", handler.RegisterUser)
 	e.Logger.Fatal(e.Start(":3000"))
 }
