@@ -18,6 +18,7 @@ func RegisterUser(c echo.Context) error {
 		jsonObj.Status = http.StatusBadRequest
 		jsonObj.Data = "Body not well formed"
 		status = http.StatusBadRequest
+		return c.JSON(status, jsonObj)
 	}
 
 	err := dao.InsertUser(userBody.Username, userBody.Password)

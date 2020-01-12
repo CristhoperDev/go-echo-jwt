@@ -3,6 +3,7 @@ package dao
 import (
 	"fmt"
 	conn "go-echo-jwt/internal/connection"
+	"go-echo-jwt/internal/model"
 )
 
 func InsertUser(username string, password string) error {
@@ -14,5 +15,27 @@ func InsertUser(username string, password string) error {
 		return err
 	}
 	return nil
+}
+
+func UserLoginByUsernamePassword(username string, password string) ([]model.User, error) {
+	var result []model.User
+	sql := "SELECT * FROM user WHERE username = ? AND password = ?"
+	rows, err := conn.DbConn.Query(sql, username, password)
+	if err != nil {
+		fmt.Println(err)
+		return result, err
+	}
+
+	for rows.Next() {
+		var row model.User
+		err = rows.Scan(&row.IdUser, &row.Username, &row.Password, &row.CreatedAt, &row.UpdatedAt)
+		if err != nil {
+			fmt.Println(err)
+			return result, err
+		}
+		result = append(result, row)
+	}
+
+	return result, nil
 }
 
