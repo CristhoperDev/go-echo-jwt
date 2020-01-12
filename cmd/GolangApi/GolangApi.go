@@ -56,6 +56,7 @@ func main() {
 	e.GET("/", startApplication)
 	e.POST("/register", handler.RegisterUser)
 	e.POST("/login", handler.UserLogin)
+	e.POST("/token", handler.RefreshToken)
 
 	r := e.Group("/")
 	r.Use(middleware.JWT([]byte("secret")))
