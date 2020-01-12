@@ -39,7 +39,7 @@ func UserLoginByUsernamePassword(username string, password string) ([]model.User
 	return result, nil
 }
 
-func getAllUsers() ([]model.User, error) {
+func GetAllUsers() ([]model.User, error) {
 	var result []model.User
 	sql := "SELECT * FROM user"
 	rows, err := conn.DbConn.Query(sql)
