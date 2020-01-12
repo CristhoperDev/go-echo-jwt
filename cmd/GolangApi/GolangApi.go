@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/subosito/gotenv"
+	"go-echo-jwt/internal/connection"
 	"go-echo-jwt/internal/handler"
 	"io"
 	"log"
@@ -48,6 +49,7 @@ func main() {
 	defer programLog.Close()
 	Init(programLog)
 	log.SetOutput(programLog)
+	connection.InitDal()
 
 	e := echo.New()
 	e.GET("/", startApplication)
