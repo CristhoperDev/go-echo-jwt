@@ -54,5 +54,6 @@ func main() {
 	e := echo.New()
 	e.GET("/", startApplication)
 	e.POST("/register", handler.RegisterUser)
+	e.POST("/login", handler.UserLogin)
 	e.Logger.Fatal(e.Start(":3000"))
 }
