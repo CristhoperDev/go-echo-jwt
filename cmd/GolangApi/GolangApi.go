@@ -62,5 +62,6 @@ func main() {
 	r.Use(middleware.JWT([]byte("secret")))
 	r.GET("users", handler.GetUsers)
 	r.POST("film", handler.FilmPost)
+	r.PUT("film", handler.FilmPut)
 	e.Logger.Fatal(e.Start(":3000"))
 }
