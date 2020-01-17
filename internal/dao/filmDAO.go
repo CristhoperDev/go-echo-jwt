@@ -60,3 +60,16 @@ func GetAllFilms() ([]model.Film, error) {
 
 	return result, nil
 }
+
+func GetFilm(filmId int) (model.Film, error) {
+	var result model.Film
+	sql := "SELECT * FROM film WHERE idfilm = ?"
+	row := conn.DbConn.QueryRow(sql, filmId)
+	err := row.Scan(&result.IdFilm, &result.Title, &result.Description, &result.CreatedAt, &result.UpdatedAt)
+	if err != nil {
+		fmt.Println(err)
+		return result, err
+	}
+
+	return result, nil
+}
