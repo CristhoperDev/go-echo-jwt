@@ -61,6 +61,6 @@ func main() {
 	r := e.Group("/")
 	r.Use(middleware.JWT([]byte("secret")))
 	r.GET("users", handler.GetUsers)
-
+	r.POST("film", handler.FilmPost)
 	e.Logger.Fatal(e.Start(":3000"))
 }
