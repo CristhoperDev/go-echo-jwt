@@ -15,3 +15,14 @@ func InsertFilm(title string, description string) error {
 	}
 	return nil
 }
+
+func UpdateFilm(title string, description string, id_film int) error {
+	sql := "UPDATE film SET title = ?, description = ? WHERE idfilm = ?"
+	rows, err := conn.DbConn.Query(sql, title, description, id_film)
+	defer rows.Close()
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}
