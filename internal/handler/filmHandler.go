@@ -2,11 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/labstack/echo"
 	"go-echo-jwt/internal/dao"
 	"go-echo-jwt/internal/model"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func FilmPost(c echo.Context) error {
@@ -96,6 +98,7 @@ func FilmDelete(c echo.Context) error  {
 }
 
 func GetFilms(c echo.Context) error {
+	ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 
@@ -104,6 +107,33 @@ func GetFilms(c echo.Context) error {
 	if len(data) == 0 {
 		jsonObj.Status = http.StatusNotFound
 		jsonObj.Data = err
+		status = http.StatusNotFound
+	} else {
+		jsonObj.Status = http.StatusOK
+		jsonObj.Data = data
+		status = http.StatusOK
+	}
+
+	return c.JSON(status, jsonObj)
+}
+
+func GetFilm(c echo.Context) error {
+	var jsonObj model.JsonResult
+	var status int
+	filmIdStr := c.Param("filmId")
+	filmId, errType := strconv.Atoi(filmIdStr)
+	if errType != nil {
+		jsonObj.Status = http.StatusBadRequest
+		jsonObj.Data = errType
+		status = http.StatusBadRequest
+		return c.JSON(status, jsonObj)
+	}
+
+	data, err := dao.GetFilm(filmId)
+
+	if err != nil {
+		jsonObj.Status = http.StatusNotFound
+		jsonObj.Data = "Not found"
 		status = http.StatusNotFound
 	} else {
 		jsonObj.Status = http.StatusOK
