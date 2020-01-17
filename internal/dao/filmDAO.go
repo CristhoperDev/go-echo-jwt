@@ -3,6 +3,7 @@ package dao
 import (
 	"fmt"
 	conn "go-echo-jwt/internal/connection"
+	"go-echo-jwt/internal/model"
 )
 
 func InsertFilm(title string, description string) error {
@@ -36,4 +37,26 @@ func DeleteFilm(filmId int) error {
 		return err
 	}
 	return nil
+}
+
+func GetAllFilms() ([]model.Film, error) {
+	var result []model.Film
+	sql := "SELECT * FROM film"
+	rows, err := conn.DbConn.Query(sql)
+	if err != nil {
+		fmt.Println(err)
+		return result, err
+	}
+
+	for rows.Next() {
+		var row model.Film
+		err = rows.Scan(&row.IdFilm, &row.Title, &row.Description, &row.CreatedAt, &row.UpdatedAt)
+		if err != nil {
+			fmt.Println(err)
+			return result, err
+		}
+		result = append(result, row)
+	}
+
+	return result, nil
 }
