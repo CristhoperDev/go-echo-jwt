@@ -64,5 +64,6 @@ func main() {
 	r.POST("film", handler.FilmPost)
 	r.PUT("film", handler.FilmPut)
 	r.DELETE("film/:filmId", handler.FilmDelete)
+	r.GET("film", handler.GetFilms)
 	e.Logger.Fatal(e.Start(":3000"))
 }
