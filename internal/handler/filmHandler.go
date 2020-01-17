@@ -94,3 +94,22 @@ func FilmDelete(c echo.Context) error  {
 
 	return c.JSON(status, jsonObj)
 }
+
+func GetFilms(c echo.Context) error {
+	var jsonObj model.JsonResult
+	var status int
+
+	data, err := dao.GetAllFilms()
+
+	if len(data) == 0 {
+		jsonObj.Status = http.StatusNotFound
+		jsonObj.Data = err
+		status = http.StatusNotFound
+	} else {
+		jsonObj.Status = http.StatusOK
+		jsonObj.Data = data
+		status = http.StatusOK
+	}
+
+	return c.JSON(status, jsonObj)
+}
