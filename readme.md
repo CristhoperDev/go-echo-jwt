@@ -13,7 +13,8 @@ Starting to create a project with connection to database to use echo and jwt
 │   ├── connection       connection to dabase
 │   ├── dao              Data Access Object
 │   ├── handler          controller 
-│   └── models           entity definitions and domain logic
+│   ├── models           entity definitions
+│   └── utils            utilities to use
 └── database
 ```
 
@@ -35,7 +36,7 @@ Starting to create a project with connection to database to use echo and jwt
 
  upload database:
  ```
-  Uplaod database on mysql
+  Upload database on mysql
  ```
  
  generate executable:
