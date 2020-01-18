@@ -7,11 +7,13 @@ import (
 	"github.com/labstack/echo"
 	"go-echo-jwt/internal/dao"
 	"go-echo-jwt/internal/model"
+	"go-echo-jwt/internal/utils"
 	"net/http"
 	"time"
 )
 
 func RegisterUser(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 
@@ -71,6 +73,7 @@ func generateToken(id int) (map[string]string, error) {
 }
 
 func UserLogin(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResultLogin
 	var status int
 
@@ -104,6 +107,7 @@ func UserLogin(c echo.Context) error {
 }
 
 func GetUsers(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 
@@ -123,6 +127,7 @@ func GetUsers(c echo.Context) error {
 }
 
 func RefreshToken(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 

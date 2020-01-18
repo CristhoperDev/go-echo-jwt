@@ -2,16 +2,16 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/labstack/echo"
 	"go-echo-jwt/internal/dao"
 	"go-echo-jwt/internal/model"
+	"go-echo-jwt/internal/utils"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func FilmPost(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 
@@ -41,6 +41,7 @@ func FilmPost(c echo.Context) error {
 }
 
 func FilmPut(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 
@@ -70,6 +71,7 @@ func FilmPut(c echo.Context) error {
 }
 
 func FilmDelete(c echo.Context) error  {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 	filmIdStr := c.Param("filmId")
@@ -98,7 +100,7 @@ func FilmDelete(c echo.Context) error  {
 }
 
 func GetFilms(c echo.Context) error {
-	ConsoleLog(c)
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 
@@ -118,6 +120,7 @@ func GetFilms(c echo.Context) error {
 }
 
 func GetFilm(c echo.Context) error {
+	utils.ConsoleLog(c)
 	var jsonObj model.JsonResult
 	var status int
 	filmIdStr := c.Param("filmId")
